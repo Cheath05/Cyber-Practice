@@ -1,0 +1,21 @@
+# Example challenge containers for Project 09. Each challenge gets its own network and memory
+# limit and exposes only its port, bound to the ctf-host IP. CTFd runs from its own compose file
+# on a DIFFERENT network, so a popped challenge can't reach the scoreboard database.
+name: ctf-challenges
+
+services:
+  web-1:
+    image: traefik/whoami            # replace with your own toy web app image
+    restart: unless-stopped
+    ports:
+      - "10.10.30.30:8001:80"
+    mem_limit: 128m
+    pids_limit: 100
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - web1
+
+networks:
+  web1:
