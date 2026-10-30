@@ -1,0 +1,81 @@
+# scoringengine config for game night (Project 10). Copy to ~/se/bin/competition.yaml.
+# Format follows scoringengine's own bin/competition.yaml example. Lab-only placeholder
+# passwords: CHANGE THEM before the event.
+---
+teams:
+- name: WhiteTeam
+  color: White
+  users:
+  - username: whiteteam
+    password: CHANGE_ME_white
+- name: RedTeam
+  color: Red
+  users:
+  - username: redteam
+    password: CHANGE_ME_red
+- name: Blue1
+  color: Blue
+  users:
+  - username: blue1
+    password: CHANGE_ME_blue1
+  services:
+  - name: SSH
+    check_name: SSHCheck
+    host: 10.10.30.51
+    port: 22
+    points: 100
+    accounts:
+    - username: scorebot
+      password: CHANGE_ME_scorebot
+    environments:
+    - matching_content: "^SUCCESS"
+      properties:
+      - name: commands
+        value: id
+  - name: HTTP
+    check_name: HTTPCheck
+    host: 10.10.30.51
+    port: 80
+    points: 100
+    environments:
+    - matching_content: "Homelab Widgets"
+      properties:
+      - name: useragent
+        value: scoringengine
+      - name: vhost
+        value: 10.10.30.51
+      - name: uri
+        value: "/"
+- name: Blue2
+  color: Blue
+  users:
+  - username: blue2
+    password: CHANGE_ME_blue2
+  services:
+  - name: SSH
+    check_name: SSHCheck
+    host: 10.10.30.52
+    port: 22
+    points: 100
+    accounts:
+    - username: scorebot
+      password: CHANGE_ME_scorebot
+    environments:
+    - matching_content: "^SUCCESS"
+      properties:
+      - name: commands
+        value: id
+  - name: HTTP
+    check_name: HTTPCheck
+    host: 10.10.30.52
+    port: 80
+    points: 100
+    environments:
+    - matching_content: "Homelab Widgets"
+      properties:
+      - name: useragent
+        value: scoringengine
+      - name: vhost
+        value: 10.10.30.52
+      - name: uri
+        value: "/"
