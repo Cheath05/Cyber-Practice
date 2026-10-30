@@ -1,0 +1,19 @@
+# Example split-tunnel WireGuard client config (annotated)
+[Interface]
+# This device's private key. Generated here, never shared, never committed.
+PrivateKey = <redacted>
+# This device's address inside the tunnel. Must match the peer's Allowed IPs on the server.
+Address = 10.10.99.2/32
+# Optional: use OPNsense for lab name resolution. Note: on many clients this makes ALL DNS go
+# through the tunnel. Leave it out unless you've allowed DNS to 10.10.99.1 on WG_FRIENDS.
+# DNS = 10.10.99.1
+
+[Peer]
+# The server's PUBLIC key (safe to share).
+PublicKey = <server public key>
+# Your DDNS name + forwarded port.
+Endpoint = vpn.example.com:51820
+# Client side: which destinations to route into the tunnel (split tunnel = lab only).
+AllowedIPs = 10.10.0.0/16
+# Keeps NAT mappings alive so the server can reach you; 25 s is the usual value.
+PersistentKeepalive = 25

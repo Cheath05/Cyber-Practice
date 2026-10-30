@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Cyber-Practice Tracker{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1l6 2.5v4C14 11 11.5 14 8 15 4.5 14 2 11 2 7.5v-4z' fill='%232a78d6'/%3E%3C/svg%3E">
+  <script src="{{ url_for('static', path='app.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">🛡️ Cyber-Practice Tracker</a>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/api/export">Export backup</a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle light or dark theme">Theme</button>
+    </nav>
+  </header>
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

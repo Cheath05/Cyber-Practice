@@ -1,0 +1,10 @@
+<!-- Add inside <ossec_config> in /var/ossec/etc/ossec.conf on the Wazuh manager, then
+     `systemctl restart wazuh-manager`. OPNsense sends from its BLUE interface IP.
+     Do NOT widen allowed-ips: syslog over UDP is unauthenticated and easy to spoof. -->
+<remote>
+  <connection>syslog</connection>
+  <port>514</port>
+  <protocol>udp</protocol>
+  <allowed-ips>10.10.40.1</allowed-ips>
+  <local_ip>10.10.40.10</local_ip>
+</remote>

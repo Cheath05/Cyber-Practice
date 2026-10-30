@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% from "_macros.html" import bar, status %}
+{% block content %}
+{% set o = s.overall %}
+
+<section class="tiles">
+  <div class="tile">
+    <div class="tile-label">Overall progress</div>
+    <div class="tile-value" data-overall-pct>{{ o.pct }}%</div>
+    {{ bar(o.pct, 'Overall') }}
+    <div class="tile-sub"><span data-overall-done>{{ o.done }}</span> of {{ o.total }} checklist items</div>
+  </div>
+  <div class="tile">
+    <div class="tile-label">Projects complete</div>
+    <div class="tile-value">{{ o.projects_complete }}<span class="tile-of">/{{ o.projects_total }}</span></div>
+    <div class="tile-sub">all checkpoints, done-criteria &amp; deliverables ticked</div>
+  </div>
+  <div class="tile">
+    <div class="tile-label">Hours logged</div>
+    <div class="tile-value">{{ o.hours_logged }}<span class="tile-of"> h</span></div>
+    {{ bar([((o.hours_logged / o.hours_planned) * 100) | round | int, 100] | min, 'Hours') }}
+    <div class="tile-sub">of ~{{ o.hours_planned }} h planned (incl. buffer)</div>
+  </div>
+  <div class="tile">
+    {% if s.phase %}
+      <div class="tile-label">Current phase</div>
+      <div class="tile-value tile-value-sm">{{ s.phase.name }}</div>
+      <div class="tile-sub">{{ s.phase_days_left }} days left · ends {{ s.phase.end }}</div>
+    {% elif s.upcoming_phase %}
+      <div class="tile-label">Next phase</div>
+      <div class="tile-value tile-value-sm">{{ s.upcoming_phase.name }}</div>
+      <div class="tile-sub">starts {{ s.upcoming_phase.start }}</div>
+    {% else %}
+      <div class="tile-label">Schedule</div>
+      <div class="tile-value tile-value-sm">Plan complete 🎉</div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="grid-2">
+  <div class="card">
+    <h2>This week</h2>
+    {% if s.week %}
+      <p class="week-dates">{{ s.week.start }} → {{ s.week.end }}</p>
+      <p class="week-focus">{{ s.week.focus }}</p>
+      {% for pid in s.week.projects %}<a class="pill" href="/project/{{ pid }}">Open P{{ pid }}</a>{% endfor %}
+    {% elif s.next_week %}
+      <p class="week-dates">Starts {{ s.next_week.start }}</p>
+      <p class="week-focus">{{ s.next_week.focus }}</p>
+      {% for pid in s.next_week.projects %}<a class="pill" href="/project/{{ pid }}">Open P{{ pid }}</a>{% endfor %}
+    {% else %}
+      <p class="muted">No scheduled week. Pick a stretch goal!</p>
+    {% endif %}
+    <h3>Milestones</h3>
+    <ul class="checklist milestones">
+      {% for m in s.milestones %}
+      <li class="{{ 'is-done' if m.done }} {{ 'is-overdue' if m.overdue }}">
+        <label>
+          <input type="checkbox" data-key="{{ m.key }}" {{ 'checked' if m.done }}>
+          <span class="item-text">{{ m.label }}</span>
+          <span class="due">{% if m.overdue %}<span class="status status-behind"><span class="status-icon" aria-hidden="true">!</span>overdue</span>{% endif %} {{ m.due }}</span>
+        </label>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Hours per week</h2>
+    {% set wk = s.weekly_hours %}
+    {% set vmax = [10, (wk | map(attribute='hours') | max)] | max %}
+    {% set W = 600 %}{% set H = 190 %}{% set top = 14 %}{% set base = 160 %}{% set left = 30 %}
+    {% set slot = (W - left - 6) / (wk | length) %}{% set bw = slot - 6 %}
+    <svg class="chart" viewBox="0 0 {{ W }} {{ H }}" role="img" aria-label="Hours logged per week, last {{ wk | length }} weeks">
+      <line class="grid" x1="{{ left }}" x2="{{ W }}" y1="{{ base }}" y2="{{ base }}"/>
+      <line class="grid" x1="{{ left }}" x2="{{ W }}" y1="{{ top }}" y2="{{ top }}"/>
+      <text class="axis" x="{{ left - 6 }}" y="{{ base + 4 }}" text-anchor="end">0</text>
+      <text class="axis" x="{{ left - 6 }}" y="{{ top + 4 }}" text-anchor="end">{{ vmax | round(1) }}</text>
+      {% set ty = base - (8 / vmax) * (base - top) %}
+      <line class="ref" x1="{{ left }}" x2="{{ W }}" y1="{{ ty }}" y2="{{ ty }}"/>
+      <text class="ref-label" x="{{ W - 4 }}" y="{{ ty - 5 }}" text-anchor="end">8 h target</text>
+      {% for b in wk %}
+        {% set x = left + loop.index0 * slot + 3 %}
+        {% set h = (b.hours / vmax) * (base - top) %}
+        <g class="hit" data-tip="Week of {{ b.label }}: {{ b.hours }} h">
+          <title>Week of {{ b.label }}: {{ b.hours }} h</title>
+          <rect class="hit-area" x="{{ x - 3 }}" y="{{ top }}" width="{{ slot }}" height="{{ base - top }}"/>
+          {% if h >= 4 %}
+          <path class="mark" d="M{{ x }},{{ base }} V{{ base - h + 4 }} Q{{ x }},{{ base - h }} {{ x + 4 }},{{ base - h }} H{{ x + bw - 4 }} Q{{ x + bw }},{{ base - h }} {{ x + bw }},{{ base - h + 4 }} V{{ base }} Z"/>
+          {% elif h > 0 %}
+          <rect class="mark" x="{{ x }}" y="{{ base - h }}" width="{{ bw }}" height="{{ h }}"/>
+          {% endif %}
+        </g>
+        {% if loop.index0 % 2 == 1 or loop.last %}
+        <text class="axis" x="{{ x + bw / 2 }}" y="{{ base + 18 }}" text-anchor="middle">{{ b.label }}</text>
+        {% endif %}
+      {% endfor %}
+    </svg>
+    <details class="table-view">
+      <summary>Table view</summary>
+      <table><thead><tr><th>Week of</th><th>Hours</th></tr></thead>
+        <tbody>{% for b in wk %}<tr><td>{{ b.label }}</td><td>{{ b.hours }}</td></tr>{% endfor %}</tbody></table>
+    </details>
+
+    <h2 class="mt">Career interest</h2>
+    {% if s.interest %}
+      <p class="muted small">"Enjoyed" rating (1–5) from each project's path-finder. Highest first.</p>
+      <svg class="chart" viewBox="0 0 600 {{ s.interest | length * 34 + 6 }}" role="img" aria-label="Enjoyment rating by project">
+        {% for p in s.interest %}
+          {% set y = loop.index0 * 34 + 4 %}{% set wbar = (p.enjoyed / 5) * 300 %}
+          <g class="hit" data-tip="P{{ p.id }} {{ p.title }}: {{ p.enjoyed }}/5">
+            <title>P{{ p.id }} {{ p.title }}: {{ p.enjoyed }}/5</title>
+            <rect class="hit-area" x="0" y="{{ y - 2 }}" width="600" height="30"/>
+            <text class="hlabel" x="232" y="{{ y + 16 }}" text-anchor="end">P{{ p.id }} {{ p.title | truncate(22, True, '…', 0) }}</text>
+            <path class="mark" d="M242,{{ y + 2 }} H{{ 242 + wbar - 4 }} Q{{ 242 + wbar }},{{ y + 2 }} {{ 242 + wbar }},{{ y + 6 }} V{{ y + 18 }} Q{{ 242 + wbar }},{{ y + 22 }} {{ 242 + wbar - 4 }},{{ y + 22 }} H242 Z"/>
+            <text class="hvalue" x="{{ 250 + wbar }}" y="{{ y + 16 }}">{{ p.enjoyed }}/5</text>
+          </g>
+        {% endfor %}
+      </svg>
+    {% else %}
+      <p class="muted">Rate projects as you finish them (on each project page) to see which career path you enjoy most.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>Projects</h2>
+  <div class="project-list">
+    {% for p in s.projects %}
+    <a class="project-row" href="/project/{{ p.id }}" data-project="{{ p.id }}">
+      <span class="pnum">P{{ p.id }}</span>
+      <span class="ptitle">{{ p.title }}</span>
+      <span class="pbar">{{ bar(p.pct, 'P' ~ p.id) }}</span>
+      <span class="pcount"><span data-pct>{{ p.pct }}%</span> · <span data-done>{{ p.done }}</span>/{{ p.total }}</span>
+      <span class="phours">{{ p.hours_logged }}/{{ p.hours_planned | round | int }} h</span>
+      <span class="pdue">{{ p.due or '—' }}</span>
+      <span class="pstatus">{{ status(p) }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>My tasks</h2>
+  <p class="muted small">Anything outside the guides: internship applications, Security+ exam, NCL registration, resume updates…</p>
+  <form id="task-form" class="inline-form">
+    <input type="text" name="text" maxlength="300" placeholder="e.g. Apply to 5 internships this week" required>
+    <button type="submit">Add</button>
+  </form>
+  <ul class="checklist">
+    {% for t in tasks %}
+    <li class="{{ 'is-done' if t.done }}">
+      <label><input type="checkbox" data-task-id="{{ t.id }}" {{ 'checked' if t.done }}><span class="item-text">{{ t.text }}</span></label>
+      <button type="button" class="link-btn" data-delete-url="/api/tasks/{{ t.id }}" aria-label="Delete task">✕</button>
+    </li>
+    {% else %}
+    <li class="muted">No tasks yet.</li>
+    {% endfor %}
+  </ul>
+</section>
+<p class="footer muted small">Today: {{ s.today }} · Checklists are read live from the repo; your progress is stored in SQLite.</p>
+{% endblock %}

@@ -1,0 +1,20 @@
+# Alternative to installing step-ca in an LXC: run it in Docker on a LAB-MGMT host.
+# First start initializes a CA and prints the provisioner password in the logs
+# (`docker compose logs step-ca`); store it in your password manager.
+# Then export the ROOT key off this host and delete it here (the intermediate keeps issuing).
+name: pki
+
+services:
+  step-ca:
+    image: smallstep/step-ca:latest
+    restart: unless-stopped
+    environment:
+      - DOCKER_STEPCA_INIT_NAME=Homelab Internal CA
+      - DOCKER_STEPCA_INIT_DNS_NAMES=ca.lab.home.arpa,10.10.10.30,localhost
+    ports:
+      - "10.10.10.30:9000:9000"
+    volumes:
+      - step:/home/step
+
+volumes:
+  step:

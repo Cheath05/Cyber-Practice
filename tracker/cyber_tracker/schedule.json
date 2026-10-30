@@ -1,0 +1,53 @@
+{
+  "_comment": "Mirrors docs/schedule.md. Edit dates here if you re-plan; milestones become checkable items.",
+  "planned_hours_total": 242,
+  "phases": [
+    {"id": "1", "name": "Phase 1: Resume sprint", "start": "2026-11-02", "end": "2026-12-20", "hours": 56},
+    {"id": "2", "name": "Phase 2: Winter break", "start": "2026-12-21", "end": "2027-01-17", "hours": 40},
+    {"id": "3", "name": "Phase 3: Spring semester", "start": "2027-01-18", "end": "2027-05-16", "hours": 120},
+    {"id": "4", "name": "Phase 4: Summer 2027", "start": "2027-05-17", "end": "2027-08-15", "hours": 26}
+  ],
+  "weeks": [
+    {"start": "2026-11-02", "end": "2026-11-08", "focus": "P01 Lab Foundation: OPNsense resize, VLANs, rules, template", "projects": ["01"]},
+    {"start": "2026-11-09", "end": "2026-11-15", "focus": "P02 Networking Deep Dive: captures, DNS/DHCP/ARP, Suricata", "projects": ["02"]},
+    {"start": "2026-11-16", "end": "2026-11-22", "focus": "P08 part 1: install Wazuh, Linux agents, first alerts", "projects": ["08"]},
+    {"start": "2026-11-23", "end": "2026-11-29", "focus": "P08 part 1: custom rules, triage tickets (Thanksgiving)", "projects": ["08"]},
+    {"start": "2026-11-30", "end": "2026-12-06", "focus": "P06 part 1: Juice Shop / DVWA, pentest report", "projects": ["06"]},
+    {"start": "2026-12-07", "end": "2026-12-13", "focus": "P04 CyberPatriot Linux image: build + plant (finals, light)", "projects": ["04"]},
+    {"start": "2026-12-14", "end": "2026-12-20", "focus": "P04: aeacus scoring, swap images (finals). Checkpoint 1: resume update", "projects": ["04"]},
+    {"start": "2026-12-21", "end": "2026-12-27", "focus": "P03 WireGuard for you and friends", "projects": ["03"]},
+    {"start": "2026-12-28", "end": "2027-01-03", "focus": "P07 build: Windows templates, DC, client, users", "projects": ["07"]},
+    {"start": "2027-01-04", "end": "2027-01-10", "focus": "P07 attack + defend (+ AD CS Part D)", "projects": ["07"]},
+    {"start": "2027-01-11", "end": "2027-01-17", "focus": "P08 part 2: Sysmon + purple team. Checkpoint 2: resume v3", "projects": ["08"]},
+    {"start": "2027-01-18", "end": "2027-01-31", "focus": "P05 CyberPatriot Windows image", "projects": ["05"]},
+    {"start": "2027-02-01", "end": "2027-02-14", "focus": "P06 part 2: Metasploitable 2, Vulhub, report v2", "projects": ["06"]},
+    {"start": "2027-02-15", "end": "2027-02-28", "focus": "P09 Host a CTF for friends", "projects": ["09"]},
+    {"start": "2027-03-01", "end": "2027-03-14", "focus": "P10 Red vs Blue game night (spring break)", "projects": ["10"]},
+    {"start": "2027-03-15", "end": "2027-03-28", "focus": "P11 DFIR & incident response", "projects": ["11"]},
+    {"start": "2027-03-29", "end": "2027-04-18", "focus": "P12 Vuln mgmt, data security & GRC", "projects": ["12"]},
+    {"start": "2027-04-19", "end": "2027-05-16", "focus": "Finals buffer / catch-up. Checkpoint 3: portfolio polish", "projects": []},
+    {"start": "2027-05-17", "end": "2027-07-11", "focus": "P13 Infrastructure as Code", "projects": ["13"]},
+    {"start": "2027-07-12", "end": "2027-08-15", "focus": "P14 Cloud & AI security", "projects": ["14"]}
+  ],
+  "milestones": [
+    {"id": "p01", "project": "01", "label": "P01 Lab Foundation complete", "due": "2026-11-08"},
+    {"id": "p02", "project": "02", "label": "P02 Networking complete", "due": "2026-11-15"},
+    {"id": "p08a", "project": "08", "label": "P08 part 1 (Linux SOC) complete", "due": "2026-11-29"},
+    {"id": "p06a", "project": "06", "label": "P06 part 1 (web pentest + report) complete", "due": "2026-12-06"},
+    {"id": "p04", "project": "04", "label": "P04 CyberPatriot Linux image complete", "due": "2026-12-20"},
+    {"id": "cp1", "project": "", "label": "Checkpoint 1: resume + public portfolio updated", "due": "2026-12-20"},
+    {"id": "p03", "project": "03", "label": "P03 WireGuard complete", "due": "2026-12-27"},
+    {"id": "p07", "project": "07", "label": "P07 Active Directory complete", "due": "2027-01-10"},
+    {"id": "p08b", "project": "08", "label": "P08 part 2 (purple team) complete", "due": "2027-01-17"},
+    {"id": "cp2", "project": "", "label": "Checkpoint 2: resume v3 with AD purple-team bullet", "due": "2027-01-17"},
+    {"id": "p05", "project": "05", "label": "P05 CyberPatriot Windows image complete", "due": "2027-01-31"},
+    {"id": "p06b", "project": "06", "label": "P06 part 2 (network pentest) complete", "due": "2027-02-14"},
+    {"id": "p09", "project": "09", "label": "P09 CTF hosted", "due": "2027-02-28"},
+    {"id": "p10", "project": "10", "label": "P10 Red vs Blue game night run", "due": "2027-03-14"},
+    {"id": "p11", "project": "11", "label": "P11 DFIR complete", "due": "2027-03-28"},
+    {"id": "p12", "project": "12", "label": "P12 Vuln mgmt / data sec / GRC complete", "due": "2027-04-18"},
+    {"id": "cp3", "project": "", "label": "Checkpoint 3: portfolio polish", "due": "2027-05-16"},
+    {"id": "p13", "project": "13", "label": "P13 Infrastructure as Code complete", "due": "2027-07-11"},
+    {"id": "p14", "project": "14", "label": "P14 Cloud & AI security complete", "due": "2027-08-15"}
+  ]
+}

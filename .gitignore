@@ -1,0 +1,54 @@
+# --- Secrets: never commit these ---
+*.key
+*.pem
+*.p12
+*.pfx
+*.kdbx
+.env
+.env.*
+secrets/
+**/wireguard/peers/
+*wg*.conf
+!*.conf.example
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform/
+
+# --- Large / sensitive lab artifacts ---
+*.iso
+*.qcow2
+*.vmdk
+*.ova
+*.raw
+*.lime
+*.mem
+*.E01
+evidence/
+*.pcap
+*.pcapng
+!**/samples/*.pcap
+
+# --- Misc ---
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+
+# --- Compiled exercise binaries ---
+*.o
+*.out
+projects/**/cpp/*
+!projects/**/cpp/*.cpp
+!projects/**/cpp/*.c
+!projects/**/cpp/*.h
+!projects/**/cpp/Makefile
+!projects/**/cpp/*.md
+
+# --- Progress tracker ---
+tracker/.venv/
+*.db
+*.db-wal
+*.db-shm

@@ -1,0 +1,10 @@
+{% macro bar(pct, label='') -%}
+<svg class="bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-label="{{ label }} {{ pct }}%">
+  <rect class="bar-track" x="0" y="0" width="100" height="8" rx="4"/>
+  {% if pct > 0 %}<rect class="bar-fill" x="0" y="0" width="{{ pct }}" height="8" rx="4"/>{% endif %}
+</svg>
+{%- endmacro %}
+
+{% macro status(p) -%}
+<span class="status status-{{ p.status }}"><span class="status-icon" aria-hidden="true">{{ p.status_icon }}</span>{{ p.status_label }}</span>
+{%- endmacro %}

@@ -1,0 +1,6 @@
+{
+  "title": "SAMPLE ONLY - download the real catalog from cisa.gov",
+  "vulnerabilities": [
+    {"cveID": "CVE-2007-2447", "vulnerabilityName": "Samba usermap script (sample entry)"}
+  ]
+}

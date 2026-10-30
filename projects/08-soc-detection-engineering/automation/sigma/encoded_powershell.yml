@@ -1,0 +1,28 @@
+title: Encoded PowerShell Command Line
+id: 3c1c0c1e-6c1f-4a5e-9a0b-7d1f2b8e0003
+status: experimental
+description: Detects PowerShell launched with an encoded command (-enc / -EncodedCommand).
+references:
+  - https://attack.mitre.org/techniques/T1059/001/
+author: Cyber-Practice homelab (Project 08)
+date: 2026-11-20
+tags:
+  - attack.execution
+  - attack.t1059.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+  selection_cli:
+    CommandLine|contains:
+      - ' -enc '
+      - ' -EncodedCommand '
+      - ' -e '
+  condition: all of selection_*
+falsepositives:
+  - Some management/deployment tools encode commands
+level: medium
