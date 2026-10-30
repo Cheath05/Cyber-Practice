@@ -1,9 +1,30 @@
 # Cyber-Practice Progress Tracker
 
-A small self-hosted web app for checking off your progress through the 14 projects. It reads the
-checklists **straight from this repo** (each project's *Checkpoints*, *Definition of done* and
-*Deliverables*), so it always matches the guides. Your ticks, hours and ratings are stored in
-SQLite.
+A small self-hosted web app for checking off your progress through the projects. It reads the
+checklists **straight from this repo**, so it always matches the guides. Your ticks, hours and
+ratings are stored in SQLite.
+
+## What gets tracked (automatically)
+
+Anything with a checkbox in a project folder becomes a trackable item, no tracker changes needed:
+
+| Source | What's picked up |
+|---|---|
+| `projects/NN-*/README.md` | every `- [ ]` line in **any** section (Prerequisites, Checkpoints, Definition of done, or a section you add), grouped under its `##` heading |
+| `projects/NN-*/deliverables/README.md` | every row of the deliverables table |
+| `projects/NN-*/TASKS.md` *(optional, create it yourself)* | your own extra tasks for that project; use `## headings` to group them |
+| a new `projects/15-whatever/README.md` | a whole new project, with its *Estimated time* added to the planned-hours total |
+
+- Push the change and it appears after the next pull (≤ 15 min with the pull timer), or run
+  `git -C ~/Cyber-Practice pull` on the server to see it immediately. No restart needed.
+- A box ticked **in the file** (`- [x]`, or ☑/✅ in the deliverables table) counts as done and is
+  locked in the tracker ("✓ ticked in README.md"); untick it in the file to change it.
+- Checkboxes inside ``` code blocks are ignored (they're examples).
+- Identical lines get separate checkboxes.
+- **Rewording a line resets that one item** (items are identified by their text). Deleting a line
+  removes it from the totals.
+- A new project has no due date until you add a milestone for it in
+  `cyber_tracker/schedule.json` (then restart). The dashboard lists unscheduled projects.
 
 ![Dashboard](docs/dashboard.png)
 
@@ -16,6 +37,7 @@ SQLite.
 - **Career interest**: your path-finder "enjoyed" ratings, ranked, so you can see which security
   path you like best
 - Deliverables show "file created" once `scripts/new-doc.sh` has made the file
+- Every project page labels where each group of items comes from (README.md, deliverables, TASKS.md)
 - **My tasks** for anything outside the guides (applications, Security+, NCL registration…)
 - Export a JSON backup of all your data
 
@@ -100,9 +122,11 @@ flowchart LR
 ```
 
 - `cyber_tracker/repo_parser.py`: turns the Markdown checklists into items with stable IDs (a hash
-  of project + section + text). If you reword an item in a guide, that one item resets.
+  of project + section + text). The footer shows which commit the tracker is reading and when
+  the repo was last pulled.
 - `cyber_tracker/schedule.json`: phases, weeks and milestones mirrored from
-  `docs/schedule.md`. **Edit it if you re-plan**, then restart.
+  `docs/schedule.md`, plus `buffer_hours` (planned total = every project's estimate + buffer).
+  **Edit it if you re-plan**, then restart.
 - `cyber_tracker/db.py`: SQLite tables for checks, hours, ratings and tasks. Parameterized
   queries only (see P06 for why).
 
@@ -122,7 +146,7 @@ flowchart LR
 
 ```bash
 cd tracker && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python -m pytest -q                       # 19 tests: parser, API, CSRF, allowlist, escaping
+.venv/bin/python -m pytest -q                       # 28 tests: parser, dynamic items, API, CSRF, allowlist, escaping
 CT_DB=/tmp/dev.db .venv/bin/uvicorn cyber_tracker.main:app --reload --port 8002
 ```
 

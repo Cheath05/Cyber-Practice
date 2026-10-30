@@ -123,6 +123,9 @@
   </div>
 </section>
 
+{% if s.unscheduled %}
+<p class="notice">Not on the schedule yet: {% for p in s.unscheduled %}<a href="/project/{{ p.id }}">P{{ p.id }} {{ p.title }}</a>{{ ", " if not loop.last }}{% endfor %}. Add a milestone for it in <code>tracker/cyber_tracker/schedule.json</code> to get a due date and status.</p>
+{% endif %}
 <section class="card">
   <h2>Projects</h2>
   <div class="project-list">
@@ -158,5 +161,5 @@
     {% endfor %}
   </ul>
 </section>
-<p class="footer muted small">Today: {{ s.today }} · Checklists are read live from the repo; your progress is stored in SQLite.</p>
+<p class="footer muted small">Today: {{ s.today }} · Checklists are read live from the repo{% if s.repo.commit %} ({{ s.repo.branch or 'detached' }} @ <code>{{ s.repo.commit }}</code>{% if s.repo.last_pull %}, last pull {{ s.repo.last_pull }}{% endif %}){% endif %}; your progress is stored in SQLite.</p>
 {% endblock %}

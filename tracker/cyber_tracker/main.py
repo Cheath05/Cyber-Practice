@@ -13,7 +13,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
@@ -24,11 +24,10 @@ from markupsafe import Markup, escape
 
 from . import __version__
 from .db import Database
-from .repo_parser import RepoCache
+from .repo_parser import RepoCache, repo_version
 
 PKG = Path(__file__).resolve().parent
 MUTATION_HEADER = ("x-requested-with", "cyber-tracker")
-KIND_LABELS = {"checkpoint": "Checkpoints", "done": "Definition of done", "deliverable": "Deliverables"}
 
 
 def _md(text: str) -> Markup:
@@ -96,7 +95,7 @@ def create_app(repo: Path | None = None, db_path: Path | None = None) -> FastAPI
         projects = []
         total_items = done_items = 0
         for p in cache.projects():
-            done = sum(1 for i in p.items if i.key in checked)
+            done = sum(1 for i in p.items if i.key in checked or i.repo_done)
             total = len(p.items)
             total_items += total
             done_items += done
@@ -138,13 +137,20 @@ def create_app(repo: Path | None = None, db_path: Path | None = None) -> FastAPI
         next_week = None if week else next((w for w in schedule["weeks"] if date.fromisoformat(w["start"]) > t), None)
 
         total_logged = round(sum(hours.values()), 1)
+        # Planned total follows the guides: every project's estimate + the schedule's buffer.
+        planned_total = round(schedule.get("buffer_hours", 0) + sum(p["hours_planned"] for p in projects))
+        version = repo_version(repo)
+        if version["last_pull"]:
+            version["last_pull"] = datetime.fromtimestamp(version["last_pull"]).strftime("%Y-%m-%d %H:%M")
         return {
             "today": t.isoformat(),
             "overall": {"done": done_items, "total": total_items,
                         "pct": round(100 * done_items / total_items) if total_items else 0,
                         "projects_complete": sum(1 for p in projects if p["status"] == "complete"),
                         "projects_total": len(projects),
-                        "hours_logged": total_logged, "hours_planned": schedule["planned_hours_total"]},
+                        "hours_logged": total_logged, "hours_planned": planned_total},
+            "unscheduled": [p for p in projects if not p["due"]],
+            "repo": version,
             "phase": phase, "upcoming_phase": upcoming_phase,
             "phase_days_left": (date.fromisoformat(phase["end"]) - t).days if phase else None,
             "week": week, "next_week": next_week,
@@ -197,12 +203,13 @@ def create_app(repo: Path | None = None, db_path: Path | None = None) -> FastAPI
         info = next(x for x in summary["projects"] if x["id"] == pid)
         checked = db.checked_keys()
         groups = []
-        for kind, label in KIND_LABELS.items():
-            items = [{"key": i.key, "text": i.text, "checked": i.key in checked, "file": i.file,
-                      "file_exists": i.file_exists} for i in p.items if i.kind == kind]
-            if items:
-                groups.append({"kind": kind, "label": label, "rows": items,
-                               "done": sum(1 for i in items if i["checked"])})
+        for kind, label, group_items in p.groups():
+            rows = [{"key": i.key, "text": i.text, "checked": i.key in checked or i.repo_done,
+                     "repo_done": i.repo_done, "file": i.file, "file_exists": i.file_exists,
+                     "source": i.source} for i in group_items]
+            groups.append({"kind": kind, "label": label, "rows": rows,
+                           "source": group_items[0].source,
+                           "done": sum(1 for r in rows if r["checked"])})
         milestones = [m for m in summary["milestones"] if m["project"] == pid]
         return templates.TemplateResponse(request, "project.html", {
             "p": info, "groups": groups, "milestones": milestones, "today": summary["today"],
@@ -227,6 +234,8 @@ def create_app(repo: Path | None = None, db_path: Path | None = None) -> FastAPI
         milestones = {milestone_key(m["id"]): m for m in schedule["milestones"]}
         if key in items:
             project = items[key].project
+            if items[key].repo_done and not checked:
+                raise HTTPException(409, "This item is ticked in the repo file itself; untick it there.")
         elif key in milestones:
             project = milestones[key]["project"] or "milestone"
         else:
