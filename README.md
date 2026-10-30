@@ -47,6 +47,13 @@ managers ask about most, so your resume improves during this application cycle.
 | ☐ | 13 | [Infrastructure as Code Capstone](projects/13-infrastructure-as-code/) | Terraform, Ansible (cloud/DevSecOps) | 16 | 4 |
 | ☐ | 14 | [Cloud & AI Security](projects/14-cloud-ai-security/) | IAM, S3, LLM prompt injection (cloud, AI sec) | 10 | 4 |
 
+## Track your progress
+
+[`tracker/`](tracker/) is a small self-hosted web app (FastAPI + SQLite, ~55 MB RAM) that turns
+every project checklist into tick-boxes, logs hours, shows schedule milestones and charts your
+career interests. It runs on your Ubuntu server behind `tailscale serve`. See
+[tracker/README.md](tracker/README.md).
+
 ## Docs
 
 | Doc | What it's for |

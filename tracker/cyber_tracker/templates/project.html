@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% from "_macros.html" import bar, status %}
+{% block title %}P{{ p.id }} {{ p.title }} · Tracker{% endblock %}
+{% block content %}
+<p><a href="/">← Dashboard</a></p>
+<section class="card project-head" data-project="{{ p.id }}">
+  <div>
+    <h1>P{{ p.id }} · {{ p.title }}</h1>
+    <p class="muted">{{ status(p) }} · due {{ p.due or '—' }} · <a href="{{ p.guide_url }}" target="_blank" rel="noopener noreferrer">Open the guide ↗</a></p>
+  </div>
+  <div class="head-stats">
+    <div class="tile-value"><span data-pct>{{ p.pct }}%</span></div>
+    {{ bar(p.pct, 'Project') }}
+    <div class="tile-sub"><span data-done>{{ p.done }}</span>/{{ p.total }} items · {{ p.hours_logged }}/{{ p.hours_planned | round | int }} h</div>
+  </div>
+</section>
+
+<section class="grid-2">
+  <div class="card">
+    {% for g in groups %}
+      <h2>{{ g.label }} <span class="muted small">{{ g.done }}/{{ g.rows | length }}</span></h2>
+      <ul class="checklist">
+        {% for i in g.rows %}
+        <li class="{{ 'is-done' if i.checked }}">
+          <label>
+            <input type="checkbox" data-key="{{ i.key }}" {{ 'checked' if i.checked }}>
+            <span class="item-text">{{ i.text | md }}</span>
+          </label>
+          {% if g.kind == 'deliverable' %}
+            <span class="file-hint {{ 'exists' if i.file_exists }}" title="{{ i.file }}">
+              {% if i.file_exists %}<span aria-hidden="true">✓</span> file created{% else %}<span aria-hidden="true">○</span> not created yet{% endif %}
+            </span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+    {% if milestones %}
+      <h2>Schedule milestones</h2>
+      <ul class="checklist">
+        {% for m in milestones %}
+        <li class="{{ 'is-done' if m.done }}"><label><input type="checkbox" data-key="{{ m.key }}" {{ 'checked' if m.done }}><span class="item-text">{{ m.label }}</span><span class="due">{{ m.due }}</span></label></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>Log hours</h2>
+      <form id="hours-form" class="stack-form" data-project="{{ p.id }}">
+        <label>Date <input type="date" name="day" value="{{ today }}" required></label>
+        <label>Hours <input type="number" name="hours" min="0.25" max="24" step="0.25" value="1" required></label>
+        <label>Note <input type="text" name="note" maxlength="500" placeholder="What did you work on?"></label>
+        <button type="submit">Log time</button>
+      </form>
+      <ul class="entries">
+        {% for e in entries %}
+        <li><span>{{ e.day }}</span><span>{{ e.hours }} h</span><span class="muted">{{ e.note }}</span>
+          <button type="button" class="link-btn" data-delete-url="/api/hours/{{ e.id }}" aria-label="Delete entry">✕</button></li>
+        {% else %}<li class="muted">No time logged yet.</li>{% endfor %}
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Path-finder rating</h2>
+      <p class="muted small">Would you want to do this 40 hours a week? Feeds the career-interest chart.</p>
+      <form id="rating-form" class="stack-form" data-project="{{ p.id }}">
+        <label>Enjoyed (1–5) <input type="number" name="enjoyed" min="1" max="5" value="{{ rating.enjoyed if rating and rating.enjoyed }}"></label>
+        <label>Felt natural (1–5) <input type="number" name="natural" min="1" max="5" value="{{ rating.natural if rating and rating.natural }}"></label>
+        <label class="row"><input type="checkbox" name="want_more" {{ 'checked' if rating and rating.want_more }}> Want more of this</label>
+        <label>Notes <textarea name="notes" rows="3" maxlength="1000">{{ rating.notes if rating }}</textarea></label>
+        <button type="submit">Save rating</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

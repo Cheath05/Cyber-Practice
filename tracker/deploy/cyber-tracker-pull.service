@@ -1,0 +1,15 @@
+# Keeps the repo checkout current so new checklist items appear automatically.
+[Unit]
+Description=Pull the Cyber-Practice repo for the tracker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@USER@
+ExecStart=/usr/bin/git -C @REPO@ pull --ff-only --quiet
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=@REPO@
+PrivateTmp=yes

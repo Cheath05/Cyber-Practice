@@ -46,3 +46,9 @@ projects/**/cpp/*
 !projects/**/cpp/*.h
 !projects/**/cpp/Makefile
 !projects/**/cpp/*.md
+
+# --- Progress tracker ---
+tracker/.venv/
+*.db
+*.db-wal
+*.db-shm

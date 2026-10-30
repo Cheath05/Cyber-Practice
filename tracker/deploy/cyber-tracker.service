@@ -1,0 +1,51 @@
+# Installed by deploy/install.sh (it fills in @USER@, @REPO@, @TRACKER@, @PORT@).
+[Unit]
+Description=Cyber-Practice progress tracker (FastAPI, loopback only)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=@USER@
+Group=@USER@
+WorkingDirectory=@TRACKER@
+Environment=CT_REPO=@REPO@
+Environment=CT_DB=/var/lib/cyber-tracker/tracker.db
+Environment=PYTHONDONTWRITEBYTECODE=1
+# Optional overrides (e.g. CT_ALLOWED_LOGINS=you@example.com). The leading "-" makes it optional.
+EnvironmentFile=-/etc/cyber-tracker.env
+# Loopback only: tailscale serve is the only way in from other devices.
+ExecStart=@TRACKER@/.venv/bin/uvicorn cyber_tracker.main:app --host 127.0.0.1 --port @PORT@ --workers 1
+StateDirectory=cyber-tracker
+StateDirectoryMode=0750
+Restart=on-failure
+RestartSec=5
+
+# Resource limits: this box also runs Cardinal and Footsim
+MemoryMax=200M
+CPUQuota=25%
+TasksMax=64
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

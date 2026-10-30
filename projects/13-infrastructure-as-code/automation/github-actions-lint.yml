@@ -22,6 +22,12 @@ jobs:
       - name: Repo checks (shell, python, C/C++, YAML, XML, compose, links, secrets)
         run: scripts/check-repo.sh
 
+      - name: Tracker tests
+        working-directory: tracker
+        run: |
+          pip install -r requirements-dev.txt
+          python -m pytest -q
+
       - name: Ansible syntax check
         working-directory: projects/13-infrastructure-as-code/automation/ansible
         run: |
