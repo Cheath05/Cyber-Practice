@@ -1,0 +1,5 @@
+{"template-id":"apache-version-detect","info":{"name":"Apache Detection","severity":"info"},"host":"http://10.10.30.20","matched-at":"http://10.10.30.20","timestamp":"2027-04-01T10:00:00Z"}
+{"template-id":"CVE-2011-2523","info":{"name":"vsftpd 2.3.4 Backdoor","severity":"critical","classification":{"cve-id":["cve-2011-2523"],"cvss-score":9.8}},"host":"10.10.30.20:21","matched-at":"10.10.30.20:21","timestamp":"2027-04-01T10:01:00Z"}
+{"template-id":"http-missing-security-headers","info":{"name":"HTTP Missing Security Headers","severity":"info"},"host":"http://10.10.30.10:3000","matched-at":"http://10.10.30.10:3000","timestamp":"2027-04-01T10:02:00Z"}
+{"template-id":"CVE-2007-2447","info":{"name":"Samba usermap script RCE","severity":"medium","classification":{"cve-id":["cve-2007-2447"],"cvss-score":6.0}},"host":"10.10.30.20:445","matched-at":"10.10.30.20:445","timestamp":"2027-04-01T10:03:00Z"}
+{"template-id":"CVE-2011-2523","info":{"name":"vsftpd 2.3.4 Backdoor","severity":"critical","classification":{"cve-id":["cve-2011-2523"],"cvss-score":9.8}},"host":"10.10.30.20:21","matched-at":"10.10.30.20:21","timestamp":"2027-04-01T10:05:00Z"}
