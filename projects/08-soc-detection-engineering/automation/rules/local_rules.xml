@@ -1,0 +1,113 @@
+<!--
+  Project 08 custom rules (solution). Copy to /var/ossec/etc/rules/local_rules.xml, then
+  `systemctl restart wazuh-manager`. Custom rule IDs must be 100000-120000.
+  Field names follow the Wazuh 4.x decoders: test EVERY rule with
+  /var/ossec/bin/wazuh-logtest before relying on it.
+-->
+
+<group name="local,linux,persistence,">
+
+  <!-- FIM: any change to sudoers is high severity (P04 planted a NOPASSWD drop-in) -->
+  <rule id="100100" level="12">
+    <if_sid>550, 554</if_sid>
+    <field name="file" type="pcre2">^/etc/sudoers</field>
+    <description>Sudoers configuration changed: $(file)</description>
+    <mitre>
+      <id>T1548.003</id>
+    </mitre>
+  </rule>
+
+  <!-- FIM: new or changed cron entries (cron persistence) -->
+  <rule id="100101" level="10">
+    <if_sid>550, 554</if_sid>
+    <field name="file" type="pcre2">^/etc/(cron\.d/|crontab$|cron\.(hourly|daily|weekly|monthly)/)</field>
+    <description>Cron job created or modified: $(file)</description>
+    <mitre>
+      <id>T1053.003</id>
+    </mitre>
+  </rule>
+
+  <!-- FIM: identity files changed (new users, UID-0 tricks) -->
+  <rule id="100102" level="10">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">^/etc/(passwd|shadow|group)$</field>
+    <description>Account database modified: $(file)</description>
+    <mitre>
+      <id>T1136.001</id>
+    </mitre>
+  </rule>
+
+</group>
+
+<group name="local,windows,active_directory,">
+
+  <!-- Kerberoasting: TGS requested with RC4 (0x17) for a non-machine service account -->
+  <rule id="100110" level="10">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4769$</field>
+    <field name="win.eventdata.ticketEncryptionType">^0x17$</field>
+    <field name="win.eventdata.serviceName" negate="yes" type="pcre2">\$$|^krbtgt$</field>
+    <description>Possible Kerberoasting: RC4 service ticket for $(win.eventdata.serviceName) requested by $(win.eventdata.targetUserName)</description>
+    <mitre>
+      <id>T1558.003</id>
+    </mitre>
+  </rule>
+
+  <!-- Same requester asks for several RC4 tickets quickly: much stronger signal -->
+  <rule id="100111" level="13" frequency="3" timeframe="120">
+    <if_matched_sid>100110</if_matched_sid>
+    <same_field>win.eventdata.targetUserName</same_field>
+    <description>Kerberoasting burst: multiple RC4 service tickets requested by $(win.eventdata.targetUserName)</description>
+    <mitre>
+      <id>T1558.003</id>
+    </mitre>
+  </rule>
+
+  <!-- AS-REP roasting: TGT issued without pre-authentication (PreAuthType 0) -->
+  <rule id="100112" level="10">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4768$</field>
+    <field name="win.eventdata.preAuthType">^0$</field>
+    <description>Possible AS-REP roasting: TGT without pre-authentication for $(win.eventdata.targetUserName)</description>
+    <mitre>
+      <id>T1558.004</id>
+    </mitre>
+  </rule>
+
+  <!-- Member added to a local or domain admin group -->
+  <rule id="100113" level="12">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4732$|^4728$|^4756$</field>
+    <field name="win.eventdata.targetUserName" type="pcre2">(?i)^(Administrators|Domain Admins|Enterprise Admins|Account Operators)$</field>
+    <description>User added to privileged group $(win.eventdata.targetUserName)</description>
+    <mitre>
+      <id>T1098</id>
+    </mitre>
+  </rule>
+
+  <!-- Scheduled task created (P05 persistence) -->
+  <rule id="100114" level="8">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4698$</field>
+    <description>Scheduled task created: $(win.eventdata.taskName)</description>
+    <mitre>
+      <id>T1053.005</id>
+    </mitre>
+  </rule>
+
+</group>
+
+<group name="local,sysmon,">
+
+  <!-- Encoded PowerShell command lines -->
+  <rule id="100120" level="10">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)powershell(\.exe)?\s.*\s-(e|en|enc|encodedcommand)\s</field>
+    <description>Encoded PowerShell command executed on $(win.system.computer)</description>
+    <mitre>
+      <id>T1059.001</id>
+      <id>T1027</id>
+    </mitre>
+  </rule>
+
+</group>

@@ -1,0 +1,28 @@
+title: Kerberoasting - RC4 Service Ticket Requested for a User Account
+id: 3c1c0c1e-6c1f-4a5e-9a0b-7d1f2b8e0001
+status: experimental
+description: >
+  Detects Kerberos service ticket requests (4769) using RC4 encryption for non-machine,
+  non-krbtgt services. Kerberoasting tools commonly request RC4 because it is faster to crack.
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+author: Cyber-Practice homelab (Project 08)
+date: 2026-11-20
+tags:
+  - attack.credential-access
+  - attack.t1558.003
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4769
+    TicketEncryptionType: '0x17'
+  filter_machine:
+    ServiceName|endswith: '$'
+  filter_krbtgt:
+    ServiceName: 'krbtgt'
+  condition: selection and not 1 of filter_*
+falsepositives:
+  - Legacy applications or devices that only support RC4
+level: medium

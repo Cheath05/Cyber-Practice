@@ -1,0 +1,23 @@
+title: Sudoers File or Drop-in Modified
+id: 3c1c0c1e-6c1f-4a5e-9a0b-7d1f2b8e0002
+status: experimental
+description: Detects writes to /etc/sudoers or /etc/sudoers.d via auditd watch rules (key "sudoers").
+references:
+  - https://attack.mitre.org/techniques/T1548/003/
+author: Cyber-Practice homelab (Project 08)
+date: 2026-11-20
+tags:
+  - attack.privilege-escalation
+  - attack.t1548.003
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection:
+    type: 'PATH'
+    name|startswith:
+      - '/etc/sudoers'
+  condition: selection
+falsepositives:
+  - Legitimate administration (correlate with a change request)
+level: high

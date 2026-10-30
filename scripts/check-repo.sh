@@ -33,6 +33,19 @@ if command -v yamllint >/dev/null; then
   yamllint -d '{extends: relaxed, rules: {line-length: {max: 140}}}' "${yml_files[@]}" && echo "ok (${#yml_files[@]} files)" || rc=1
 else echo "yamllint not installed (skipped)"; fi
 
+step "XML well-formedness"
+mapfile -t xml_files < <(git ls-files -co --exclude-standard '*.xml')
+for f in "${xml_files[@]}"; do
+  # Wazuh rule files have several top-level <group> elements, so wrap them in a root first
+  python3 - "$f" <<'PY' || { echo "invalid XML: $f"; rc=1; }
+import re, sys, xml.etree.ElementTree as ET
+text = open(sys.argv[1], encoding="utf-8").read()
+text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+ET.fromstring("<root>" + text + "</root>")
+PY
+done
+echo "checked ${#xml_files[@]} files"
+
 step "docker compose config"
 mapfile -t compose_files < <(git ls-files -co --exclude-standard '*docker-compose.yml' '*compose.yaml')
 if docker compose version >/dev/null 2>&1; then
