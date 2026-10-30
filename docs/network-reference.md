@@ -111,6 +111,9 @@ Notes:
   inbound-only; lab hosts still can't initiate connections to `HOME_NET`.
 - "Firewall GUI" means OPNsense's own web UI/SSH. Only LAB-MGMT (and your own WireGuard peer, if
   you add a rule for it) may manage the firewall.
+- **Reverse connections** (P06/P10) are blocked by default (TARGETS can't initiate to RED or
+  WG peers). A *disabled-by-default* rule `TARGETS net → RED net / WG_FRIENDS net : TCP
+  4444–4460` is enabled only during an exercise and logged as a change.
 - LLMNR/NBT-NS poisoning (Project 07) only works **inside the same broadcast domain** — the
   attacker must have a NIC in VLAN 50 for that exercise. Routing from RED is not enough.
 

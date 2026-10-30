@@ -33,6 +33,13 @@ if command -v yamllint >/dev/null; then
   yamllint -d '{extends: relaxed, rules: {line-length: {max: 140}}}' "${yml_files[@]}" && echo "ok (${#yml_files[@]} files)" || rc=1
 else echo "yamllint not installed (skipped)"; fi
 
+step "docker compose config"
+mapfile -t compose_files < <(git ls-files -co --exclude-standard '*docker-compose.yml' '*compose.yaml')
+if docker compose version >/dev/null 2>&1; then
+  for f in "${compose_files[@]}"; do docker compose -f "$f" config -q || { echo "invalid: $f"; rc=1; }; done
+  echo "checked ${#compose_files[@]} files"
+else echo "docker compose not installed (skipped)"; fi
+
 step "relative markdown links"
 python3 scripts/check_links.py || rc=1
 
