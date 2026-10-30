@@ -187,6 +187,10 @@ findings. Solution: `automation/sql/metrics.sql` (`sqlite3 vulns.db < metrics.sq
 - Automate certificate renewal with **ACME** against step-ca (e.g. Caddy or certbot as an ACME
   client) so certs renew themselves.
 - Feed Greenbone/Nuclei results into Wazuh, or build a small dashboard from the SQLite data.
+- Replace your CSV/SQLite tracker with **[OWASP DefectDojo](https://github.com/DefectDojo/django-DefectDojo)**,
+  the OWASP flagship vulnerability-management platform. It imports Nuclei and OpenVAS results
+  directly. Its Docker Compose setup is meant for evaluation and is heavy (plan ~4 GB+ and run it
+  *instead of* Greenbone, not alongside).
 - Write an **incident response policy** and a **business continuity** plan for the lab.
 - Do a mock **SOC 2 / ISO 27001** gap assessment for a fictional company running your lab.
 

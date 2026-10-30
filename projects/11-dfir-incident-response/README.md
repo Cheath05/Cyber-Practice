@@ -94,6 +94,10 @@ Start a **chain-of-custody** form now and update it every time evidence moves.
 3. **Disk:** from the Proxmox host, image the VM disk while it's stopped (`qm stop`, then `dd`
    the LV or `qemu-img convert` to raw). Hash source and copy; they must match.
 4. Record every hash in the chain-of-custody form. **Analyze only copies.**
+5. **Industry tool (recommended):** repeat the triage with [Velociraptor](https://docs.velociraptor.app/),
+   the free open-source DFIR platform many IR teams use. Its **offline collector** is a single
+   binary you build in the GUI that gathers artifacts (`Linux.Sys.Users`, `Linux.Sys.Crontab`,
+   `Linux.Detection.Yara`…) into one zip. Compare what it found with your manual triage.
 
 ### Step 3: Analyze (4 h)
 
@@ -164,6 +168,8 @@ searching byte patterns efficiently.
 ## 12. Stretch goals
 
 - Run **Plaso/log2timeline** on your disk image and compare with your Python timeline.
+- Run a **Velociraptor server** (small Docker or binary install on BLUE) with agents on two
+  hosts and do a live **hunt** across both (e.g. for the `attacker@kali` SSH key).
 - Write **YARA** rules for the staged file and scan the image (`yara -r`).
 - Do a Windows investigation: capture memory from ws01 (P07) with a free tool and look for the
   P07 attack traces.
@@ -195,6 +201,6 @@ searching byte patterns efficiently.
 ## 16. References
 
 - [NIST SP 800-61r3](https://csrc.nist.gov/pubs/sp/800/61/r3/final) · [NIST SP 800-86 (forensics in IR)](https://csrc.nist.gov/pubs/sp/800/86/final)
-- [Volatility 3](https://github.com/volatilityfoundation/volatility3) · [AVML](https://github.com/microsoft/avml)
+- [Volatility 3](https://github.com/volatilityfoundation/volatility3) · [AVML](https://github.com/microsoft/avml) · [Velociraptor](https://docs.velociraptor.app/)
 - [Plaso](https://github.com/log2timeline/plaso) · [YARA](https://yara.readthedocs.io/)
 - [The DFIR Report](https://thedfirreport.com/) · [13Cubed](https://www.13cubed.com/)

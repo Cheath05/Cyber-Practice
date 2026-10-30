@@ -154,6 +154,15 @@ matches), then trigger it for real. Document each with the `detection-rule` temp
 agents, MITRE techniques. Find your noisiest rule and tune it (raise/lower level, add an
 exception for a known-benign source), and record why in the rule doc. Tuning is half the job.
 
+**Step 8b: Threat intelligence matching (1 h).** Real SOCs match logs against known-bad
+indicators. Wazuh does this with **CDB lists**: follow the official proof-of-concept
+[*Blocking a known malicious actor*](https://documentation.wazuh.com/current/proof-of-concept-guide/block-malicious-actor-ip-reputation.html),
+but feed it a reputable free list such as [abuse.ch Feodo Tracker](https://feodotracker.abuse.ch/blocklist/)
+(botnet C2 IPs). Convert the list to CDB format, add a rule with
+`<list field="srcip" lookup="address_match_key">`, and test it by adding one of your RED IPs to
+the list temporarily. Recent Wazuh versions also ship built-in malicious IP/domain CDB lists.
+Document where the feed comes from and how often it updates.
+
 ### Part 2: Windows, Sysmon & purple team (8 h)
 
 **Step 9: Windows agents + Sysmon (2 h).** On dc01 and ws01 (AD TEMP egress on): install the
@@ -186,6 +195,7 @@ highest-severity rules: triage steps, what to check, when to escalate, containme
 - [ ] FIM, auditd, SCA and vulnerability detection producing data; OPNsense syslog arriving
 - [ ] ≥ 5 custom rules, each tested with `wazuh-logtest` **and** a live trigger
 - [ ] ≥ 3 SOC tickets for real alerts
+- [ ] Threat-intel CDB list loaded and a test match alerted
 - [ ] Part 2: Windows agents + Sysmon; every P07 attack mapped in the ATT&CK coverage table
 
 ## 9. Exercises
@@ -228,6 +238,14 @@ their status. See [Python primer §9](../../docs/python-primer.md#9-talking-to-w
 - Integrate **Suricata EVE JSON** from lab-docker (run Suricata there) for richer network alerts.
 - Send Wazuh alerts to a Discord channel with a webhook integration (game nights!).
 - Try **Security Onion** or **Elastic** later on a 32 GB node and compare.
+- **Automated adversary emulation** with [MITRE Caldera](https://caldera.mitre.org/), following
+  Wazuh's own guide [*Adversary emulation with CALDERA and Wazuh*](https://wazuh.com/blog/adversary-emulation-with-caldera-and-wazuh/).
+  Run a Caldera "adversary profile" and measure how many steps your rules catch.
+- **SOAR:** connect Wazuh to [Shuffle](https://shuffler.io/) (open-source SOAR) to auto-enrich
+  alerts and open cases, as in MyDFIR's popular *SOC Automation Project* video series. Watch RAM:
+  Shuffle + TheHive won't fit alongside Wazuh on one 16 GB node.
+- Compare with [CISA Logging Made Easy (LME)](https://github.com/cisagov/LME), a free
+  government-built Wazuh + Elastic stack for small organizations (heavier than this lab's Wazuh).
 
 ## 13. Documentation deliverables
 
@@ -262,3 +280,4 @@ their status. See [Python primer §9](../../docs/python-primer.md#9-talking-to-w
 - [Atomic Red Team](https://github.com/redcanaryco/atomic-red-team) · [Sigma](https://github.com/SigmaHQ/sigma)
 - [MITRE ATT&CK](https://attack.mitre.org) · [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/)
 - [Ultimate Windows Security event encyclopedia](https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/)
+- [Wazuh: CDB lists / malicious actor PoC](https://documentation.wazuh.com/current/proof-of-concept-guide/block-malicious-actor-ip-reputation.html) · [abuse.ch](https://abuse.ch/) · [MITRE Caldera](https://caldera.mitre.org/) · [CISA LME](https://github.com/cisagov/LME)

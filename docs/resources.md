@@ -19,6 +19,9 @@ the master list.
 | flAWS / flAWS2 | AWS security challenges, no account needed | http://flaws.cloud · http://flaws2.cloud |
 | Lakera Gandalf | Prompt-injection game | https://gandalf.lakera.ai |
 | CTFtime | Calendar of live CTFs to play with friends | https://ctftime.org |
+| National Cyber League | Student CTF seasons with a scouting report | https://nationalcyberleague.org |
+| TryHackMe Advent of Cyber | Free daily labs every December | https://tryhackme.com |
+| SANS Holiday Hack Challenge | Free story-driven CTF (around Nov–Jan) | https://www.sans.org/holidayhack |
 
 ## GitHub projects used in this repo
 
@@ -49,6 +52,15 @@ the master list.
 | step-ca | P12 | https://github.com/smallstep/certificates |
 | Terraform provider bpg/proxmox | P13 | https://github.com/bpg/terraform-provider-proxmox |
 | CloudGoat 💲 (creates AWS resources) | P14 stretch | https://github.com/RhinoSecurityLabs/cloudgoat |
+| PingCastle / Purple Knight | P07 | https://www.pingcastle.com · https://www.purple-knight.com |
+| Locksmith (AD CS audit) | P07 | https://github.com/jakehildreth/Locksmith |
+| MITRE Caldera | P08 stretch | https://caldera.mitre.org |
+| Shuffle SOAR | P08 stretch | https://shuffler.io |
+| Velociraptor | P11 | https://docs.velociraptor.app |
+| OWASP DefectDojo | P12 stretch | https://github.com/DefectDojo/django-DefectDojo |
+| NVIDIA garak / Microsoft PyRIT | P14 | https://github.com/NVIDIA/garak · https://github.com/Azure/PyRIT |
+
+See also [similar-projects](similar-projects.md) for full lab platforms (Ludus, GOAD, LME, Attack Range).
 
 ## Guides & references
 

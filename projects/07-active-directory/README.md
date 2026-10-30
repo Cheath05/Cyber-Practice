@@ -35,7 +35,8 @@ probe. Doing all three sides (build, attack, defend) is what makes it stick.
 
 ## 3. Estimated time
 
-**18 hours.** Build 6 h, attack 6 h, defend 4 h, docs 2 h. Spread across Phase 2 (winter break).
+**18 hours.** Build 6 h, attack 6 h, defend 4 h, docs 2 h, plus about 2 h for Part D (AD CS),
+which comes out of the Phase 2 buffer. Spread across Phase 2 (winter break).
 
 ## 4. Resources & profile
 
@@ -139,6 +140,34 @@ Apply **LAPS** (Windows LAPS is built into modern Windows) so local admin passwo
 and rotated, and sketch a **tiering** model (Tier 0 = DC/DA, never log a Tier-0 account into a
 workstation). Snapshot `ad-hardened`.
 
+**Measure it.** Run [PingCastle](https://www.pingcastle.com/)'s health check (free edition, fine
+for auditing your own lab) on dc01 **before** (at `ad-vulnerable`) and **after** hardening. It
+produces an HTML report with risk scores per category (lower is better) and explains each
+finding. "Reduced the PingCastle risk score from X to Y" is a concrete resume number.
+[Purple Knight](https://www.purple-knight.com/) is a similar free alternative.
+
+### Part D: AD Certificate Services (2 h, strongly recommended)
+
+Misconfigured **AD CS** (the Windows certificate authority) is one of the most common real-world
+paths to domain admin today (the "ESC1–ESC16" family from SpecterOps' *Certified Pre-Owned*
+research). Most older AD labs skip it.
+
+1. On dc01, add the **Active Directory Certificate Services** role (Enterprise CA). In a real
+   network the CA would be its own server; in a 16 GB lab, co-locating is an accepted trade-off.
+   Write that down as an ADR.
+2. **Enable CA auditing** (it's off by default): `certutil -setreg CA\AuditFilter 127`, restart
+   the CA service, and enable the *Certification Services* audit subcategory. Events 4886/4887
+   (request received / certificate issued) now appear.
+3. Duplicate the *User* template into a deliberately weak one: enrollee supplies the subject,
+   client-authentication EKU, enrollable by Domain Users. That's the classic **ESC1** pattern.
+4. **Find it the way auditors do:** run [Locksmith](https://github.com/jakehildreth/Locksmith)
+   (PowerShell, defensive) and Certipy's `find -vulnerable` from Kali (enumeration only). Both
+   should flag your template and explain why.
+5. Read the [Certified Pre-Owned](https://specterops.io/wp-content/uploads/sites/3/2022/06/Certified_Pre-Owned.pdf)
+   ESC1 section to understand the impact, then **fix it** (remove "supply in request", require
+   manager approval, restrict enrollment) and re-run Locksmith until it's clean.
+6. In P08, alert on event 4887 where the requested subject/SAN differs from the requester.
+
 ## 8. Checkpoints
 
 - [ ] `lab.local` forest up; ws01 domain-joined; both snapshotted (`ad-vulnerable`)
@@ -146,6 +175,8 @@ workstation). Snapshot `ad-hardened`.
 - [ ] BloodHound shortest-path-to-DA screenshot captured
 - [ ] Each attack re-tested after its fix and shown to fail (`ad-hardened` snapshot)
 - [ ] Change requests written for the fixes
+- [ ] PingCastle report run before and after hardening; scores recorded
+- [ ] AD CS installed with auditing; weak template found by Locksmith/Certipy and then fixed
 
 ## 9. Exercises
 
@@ -223,3 +254,4 @@ Wazuh in P08. Solution: `automation/python/kerberoast_watch.py`.
 - [Orange Cyberdefense GOAD](https://github.com/Orange-Cyberdefense/GOAD)
 - [Microsoft: Kerberos authentication](https://learn.microsoft.com/en-us/windows-server/security/kerberos/kerberos-authentication-overview) · [Windows LAPS](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview)
 - [ADSecurity.org](https://adsecurity.org/) · MITRE ATT&CK [Credential Access](https://attack.mitre.org/tactics/TA0006/)
+- [PingCastle](https://www.pingcastle.com/) · [Purple Knight](https://www.purple-knight.com/) · [Locksmith (AD CS audit)](https://github.com/jakehildreth/Locksmith) · [Certified Pre-Owned (SpecterOps)](https://specterops.io/wp-content/uploads/sites/3/2022/06/Certified_Pre-Owned.pdf)

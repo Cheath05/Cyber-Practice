@@ -60,6 +60,7 @@ managers ask about most, so your resume improves during this application cycle.
 | [documentation-guide](docs/documentation-guide.md) | How industry documents work, writing style, sanitizing before publishing |
 | [career-paths](docs/career-paths.md) | SOC, pentest, DFIR, security engineering, GRC, cloud: what each does, which projects and certs fit |
 | [resources](docs/resources.md) | Curated free platforms, GitHub projects, and references |
+| [similar-projects](docs/similar-projects.md) | Reputable labs and courses that overlap with these projects, and what was adopted from them |
 | [scaling-to-two-nodes](docs/scaling-to-two-nodes.md) | RAM upgrade vs. a second OptiPlex, VLAN trunking, clustering |
 | [safety-and-legal](docs/safety-and-legal.md) | Isolation rules, licensing, rules of engagement with friends |
 

@@ -106,6 +106,24 @@ recruiting if you're applying again).
 | 4 | 26 | — | 26 |
 | **Total** | **174** | **68** | **242** |
 
+## Competitions & events calendar
+
+Competitions are the fastest way to get *external* proof of skill (NCL even gives you a
+scouting report with percentile scores). Dates below are **estimates from past seasons**; confirm
+on each site before planning around them.
+
+| When (approx.) | Event | Cost | Fits where |
+|---|---|---|---|
+| Nov – early Jan | [SANS Holiday Hack Challenge](https://www.sans.org/holidayhack) | Free | Phase 1–2 evenings; write up one challenge |
+| December (daily) | [TryHackMe Advent of Cyber](https://tryhackme.com/) | Free | Finals weeks 6–7: 30–45 min/day instead of lab work |
+| Registration ~late Jan – Mar; games ~April | [National Cyber League Spring season](https://nationalcyberleague.org/) (register via Cyber Skyline) | ~$45, often free through a faculty coach | Phase 3; add its scouting report to your resume |
+| Spring | [NCAE Cyber Games](https://www.caecommunity.org/ncae-cybergames) | Free (NCAE-C schools) | Right after P10; ask your department |
+| Spring (regional qualifiers often Jan–Mar) | [CCDC](https://www.nationalccdc.org/) via your school's team | Free | Join or start a team; P10 is your practice |
+| Ongoing | [CTFtime](https://ctftime.org/) weekend CTFs | Free | Play one a month with friends from P09 |
+
+If your school has no team or coach for NCL/NCAE/CCDC, ask the cybersecurity or CS department.
+Starting one is a leadership line on your resume.
+
 ## If you fall behind
 
 1. Cut stretch goals first, then Python exercises, then Phase 4.

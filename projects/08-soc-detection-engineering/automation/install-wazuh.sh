@@ -5,7 +5,7 @@
 #   (https://packages.wazuh.com/<X.Y>/wazuh-install.sh). Copy it from the current quickstart page.
 #   Agents must be the same or OLDER version than the manager, so use the newest release here.
 set -euo pipefail
-: "${WAZUH_MINOR:?Set WAZUH_MINOR to the version in the official quickstart URL, e.g. WAZUH_MINOR=4.12}"
+: "${WAZUH_MINOR:?Set WAZUH_MINOR to the version in the official quickstart URL, e.g. WAZUH_MINOR=4.14}"
 HEAP="${HEAP:-1536m}"     # ~30% of a 5 GB VM; the default is often too large for this box
 
 [[ $EUID -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }

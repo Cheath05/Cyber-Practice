@@ -99,6 +99,11 @@ Build a tiny evaluation harness, the same idea AI red teams use at scale:
 
 `automation/python/llm_canary_test.py` implements this against Ollama's API.
 
+5. **Compare with industry tools.** Run [NVIDIA garak](https://github.com/NVIDIA/garak), an
+   open-source LLM vulnerability scanner with hundreds of probes, against the same local model
+   (it supports Ollama). Skim [Microsoft PyRIT](https://github.com/Azure/PyRIT) too, a framework
+   for multi-turn, adaptive attacks. What did garak find that your 10-prompt harness didn't?
+
 ## 8. Checkpoints
 
 - [ ] flAWS levels done, each with misconfiguration → fix notes
@@ -106,6 +111,7 @@ Build a tiny evaluation harness, the same idea AI red teams use at scale:
 - [ ] ≥ 3 PortSwigger LLM labs solved
 - [ ] Gandalf progress with the defense-per-level notes
 - [ ] Canary harness run before and after a defense, with leak rates
+- [ ] garak run against the same model; results compared with your harness
 
 ## 9. Exercises
 
@@ -173,3 +179,4 @@ and `iam:PassRole` with `Resource: "*"`. Run it on `automation/samples/policies/
 - [AWS IAM best practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) · [CIS AWS Foundations Benchmark](https://www.cisecurity.org/benchmark/amazon_web_services)
 - [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/) · [PortSwigger LLM attacks](https://portswigger.net/web-security/llm-attacks)
 - [MITRE ATLAS](https://atlas.mitre.org/) · [Ollama API docs](https://github.com/ollama/ollama/blob/main/docs/api.md)
+- [NVIDIA garak](https://github.com/NVIDIA/garak) · [Microsoft PyRIT](https://github.com/Azure/PyRIT)
