@@ -43,6 +43,7 @@ VMID convention: `1xx` mgmt · `2xx` red · `3xx` targets · `4xx` blue · `5xx`
 | *(yours)* | prod-ubuntu | home LAN (vmbr0) | — | ~2 GB (check) | 2 | — | existing |
 | 110 | scoring | LAB-MGMT | 10.10.10.20 | 2 GB | 2 | 20 GB | 10 |
 | 120 | step-ca (LXC) | LAB-MGMT | 10.10.10.30 | 256 MB | 1 | 4 GB | 12 |
+| 220 | tailscale (LXC, fallback only) | RED | 10.10.20.20 | 256 MB | 1 | 2 GB | 03 |
 | 201 | kali | RED | 10.10.20.10 | 3 GB | 2 | 40 GB | 06/07 (optional — laptop Kali preferred) |
 | 301 | lab-docker | TARGETS | 10.10.30.10 | 3 GB | 2 | 40 GB | 06/02/12 |
 | 302 | metasploitable2 | TARGETS | 10.10.30.20 | 512 MB | 1 | 8 GB | 06 |
@@ -112,6 +113,14 @@ Notes:
   you add a rule for it) may manage the firewall.
 - LLMNR/NBT-NS poisoning (Project 07) only works **inside the same broadcast domain** — the
   attacker must have a NIC in VLAN 50 for that exercise. Routing from RED is not enough.
+
+## WireGuard tunnel addresses (Project 03)
+
+| Address | Who |
+|---|---|
+| 10.10.99.1 | OPNsense `wg0` (interface `WG_FRIENDS`) |
+| 10.10.99.2–.3 | your laptop / phone (`WG_ADMINS`: full lab access) |
+| 10.10.99.11–.49 | friends (one /32 each; TARGETS + scoreboard, AD only on game nights) |
 
 ## DNS names
 

@@ -1,0 +1,21 @@
+// Tailscale ACL for the lab subnet router (fallback to WireGuard).
+// Admin console → Access controls. Replace the example emails.
+{
+  "groups": {
+    "group:friends": ["friend1@example.com", "friend2@example.com"],
+  },
+  "tagOwners": {
+    "tag:lab-router": ["autogroup:admin"],
+  },
+  "autoApprovers": {
+    "routes": {
+      "10.10.30.0/24": ["tag:lab-router"],
+    },
+  },
+  "acls": [
+    // You (tailnet admins) can reach everything the router advertises.
+    {"action": "accept", "src": ["autogroup:admin"], "dst": ["*:*"]},
+    // Friends: TARGETS segment and the scoreboard only.
+    {"action": "accept", "src": ["group:friends"], "dst": ["10.10.30.0/24:*", "10.10.10.20:80"]},
+  ],
+}
