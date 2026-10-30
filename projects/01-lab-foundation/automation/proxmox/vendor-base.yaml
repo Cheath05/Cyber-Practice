@@ -1,0 +1,14 @@
+#cloud-config
+# Proxmox cloud-init *vendor* data. Copy to /var/lib/vz/snippets/vendor-base.yaml and enable
+# snippets on the 'local' storage:  pvesm set local --content iso,vztmpl,backup,snippets
+# Then: qm set <vmid> --cicustom "vendor=local:snippets/vendor-base.yaml"
+# NOTE: package installs need internet. On TARGETS/AD enable the TEMP egress rule first.
+timezone: America/New_York
+package_update: true
+packages:
+  - qemu-guest-agent
+  - curl
+  - vim
+  - tcpdump
+runcmd:
+  - systemctl enable --now qemu-guest-agent
