@@ -51,6 +51,7 @@ VMID convention: `1xx` mgmt · `2xx` red · `3xx` targets · `4xx` blue · `5xx`
 | 310 | cp-linux | TARGETS | 10.10.30.40 | 2 GB | 2 | 25 GB | 04 |
 | 311 | cp-windows | TARGETS | 10.10.30.41 | 4 GB | 2 | 64 GB | 05 |
 | 321–323 | rvb-blue-1..3 | TARGETS | 10.10.30.51–.53 | 1.5 GB each | 1 | linked clones | 10 |
+| 330 | victim (DFIR) | TARGETS | 10.10.30.60 | 1.5 GB | 1 | linked clone | 11 |
 | 401 | wazuh | BLUE | 10.10.40.10 | 5 GB | 4 | 50 GB | 08 |
 | 402 | scanner | BLUE | 10.10.40.20 | 4 GB | 2 | 40 GB | 12 |
 | 501 | dc01 | AD | 10.10.50.10 | 2.5 GB (2 GB if Server Core) | 2 | 50 GB | 07 |
