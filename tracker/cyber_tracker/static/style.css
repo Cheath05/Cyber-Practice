@@ -189,3 +189,10 @@ form button[type=submit] { background: var(--series-1); color: #fff; border: 0; 
   .topbar nav a[href="/"] { display: none; }
   .topbar { padding: .6rem 12px; }
 }
+
+/* Notices + source labels (dynamic tracking) */
+.notice { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--warning); border-radius: 8px; padding: .6rem .8rem; margin: 0 0 16px; }
+.source { font-weight: 400; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 0 .45rem; margin-left: .25rem; }
+.add-hint { border-top: 1px dashed var(--border); padding-top: .75rem; }
+.checklist input[type=checkbox]:disabled { opacity: 1; cursor: not-allowed; }
+.add-hint code, .notice code { white-space: nowrap; }

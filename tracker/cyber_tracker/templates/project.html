@@ -7,6 +7,7 @@
   <div>
     <h1>P{{ p.id }} · {{ p.title }}</h1>
     <p class="muted">{{ status(p) }} · due {{ p.due or '—' }} · <a href="{{ p.guide_url }}" target="_blank" rel="noopener noreferrer">Open the guide ↗</a></p>
+    {% if not p.due %}<p class="notice small">No due date yet: add a milestone with <code>"project": "{{ p.id }}"</code> to <code>tracker/cyber_tracker/schedule.json</code> and restart the tracker.</p>{% endif %}
   </div>
   <div class="head-stats">
     <div class="tile-value"><span data-pct>{{ p.pct }}%</span></div>
@@ -18,14 +19,15 @@
 <section class="grid-2">
   <div class="card">
     {% for g in groups %}
-      <h2>{{ g.label }} <span class="muted small">{{ g.done }}/{{ g.rows | length }}</span></h2>
+      <h2>{{ g.label }} <span class="muted small">{{ g.done }}/{{ g.rows | length }}</span> <span class="source small" title="Where these items come from">{{ g.source }}</span></h2>
       <ul class="checklist">
         {% for i in g.rows %}
         <li class="{{ 'is-done' if i.checked }}">
           <label>
-            <input type="checkbox" data-key="{{ i.key }}" {{ 'checked' if i.checked }}>
+            <input type="checkbox" data-key="{{ i.key }}" {{ 'checked' if i.checked }} {{ 'disabled' if i.repo_done }}>
             <span class="item-text">{{ i.text | md }}</span>
           </label>
+          {% if i.repo_done %}<span class="file-hint exists" title="Marked [x] / ☑ in {{ i.source }}; untick it there to change it">✓ ticked in {{ i.source }}</span>{% endif %}
           {% if g.kind == 'deliverable' %}
             <span class="file-hint {{ 'exists' if i.file_exists }}" title="{{ i.file }}">
               {% if i.file_exists %}<span aria-hidden="true">✓</span> file created{% else %}<span aria-hidden="true">○</span> not created yet{% endif %}
@@ -35,6 +37,9 @@
         {% endfor %}
       </ul>
     {% endfor %}
+    {% if not groups | selectattr('source', 'equalto', 'TASKS.md') | list %}
+      <p class="muted small add-hint">Want your own tasks here? Create <code>projects/{{ p.slug }}/TASKS.md</code> with <code>- [ ] task</code> lines (optional <code>## headings</code>), push it, and they'll appear after the next sync. Any <code>- [ ]</code> line you add to the README is picked up too.</p>
+    {% endif %}
     {% if milestones %}
       <h2>Schedule milestones</h2>
       <ul class="checklist">

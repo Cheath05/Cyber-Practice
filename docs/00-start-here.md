@@ -82,6 +82,7 @@ projects/NN-name/
   WORKLOG.md       ← your dated lab notebook (fill in as you go)
   deliverables/    ← your professional docs, created from /templates
   automation/      ← SOLUTION: scripts/configs/answer keys. Use only if stuck.
+  TASKS.md         ← optional: your own extra "- [ ]" tasks; the progress tracker picks them up
 ```
 
 Every guide uses the same sections: Goal → Concepts → **Learn alongside** (readings and
