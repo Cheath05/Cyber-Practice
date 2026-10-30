@@ -26,6 +26,17 @@ administration, Linux administration, virtualization, documentation.
 - Hypervisor resource management: ballooning, KSM, ZFS ARC, thin provisioning
 - Cloud-init, VM templates, linked clones, snapshots vs. backups
 
+### Learn alongside (read / watch)
+
+| Resource | Why | Time |
+|---|---|---|
+| [Practical Networking: Packet Traveling series](https://www.practicalnetworking.net/series/packet-traveling/) | How switches, routers and ARP move a packet. Exactly what your VLANs do | 2 h |
+| [Professor Messer Network+](https://www.professormesser.com/): VLANs, subnetting, routing, firewalls, NAT videos | Short videos for each concept in this project | 1.5 h |
+| [Kurose & Ross](https://gaia.cs.umass.edu/kurose_ross/) Ch. 4 (network layer: IP, subnets, NAT) + Ch. 6.4 (switches, VLANs) | The textbook explanation | 2 h |
+| [MIT Missing Semester](https://missing.csail.mit.edu/) lectures 1, 2 and 5 (shell, scripting, SSH/remote machines) | You'll live in the Proxmox shell | 3 h |
+| [MIT 6.033](https://ocw.mit.edu/courses/6-033-computer-system-engineering-spring-2018/) networking lectures (layering, routing) | Why networks are designed in layers | optional |
+| [Proxmox: Network Configuration](https://pve.proxmox.com/wiki/Network_Configuration) | Bridges and VLAN-aware bridges straight from the source | 30 min |
+
 ## 3. Estimated time
 
 **10 hours** (about 3 h resource prep + VLANs, 3 h firewall rules + testing, 2 h templates,
@@ -359,7 +370,17 @@ you've done it by hand once.
 4. **Explain NAT:** trace one packet from the test VM to example.com and back. List every
    address translation (there are two: OPNsense and your home router).
 
-## 10. Python exercise
+## 10. Coding exercises
+
+**Before you start:** [Python primer](../../docs/python-primer.md) sections 1–3 (argparse,
+subprocess, JSON).
+
+**Other languages: Bash.** Read `automation/proxmox/lab-profile.sh` line by line (associative
+arrays, functions, `case`). Then add your own profile `G` for a lab you invent, and run
+`shellcheck` on it. [MIT Missing Semester lecture 2](https://missing.csail.mit.edu/2020/shell-tools/)
+covers everything it uses.
+
+**Python:**
 
 Write `ram_report.py` for the Proxmox host. It should:
 - run `pvesh get /cluster/resources --type vm --output-format json`

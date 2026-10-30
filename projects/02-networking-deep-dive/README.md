@@ -24,6 +24,18 @@ URL into a browser?"*. After this project you'll be able to answer it with scree
 - Routing between VLANs, TTL, traceroute
 - Network IDS: signatures, rule categories, false positives
 
+### Learn alongside (read / watch)
+
+| Resource | Why | Time |
+|---|---|---|
+| [Kurose & Ross](https://gaia.cs.umass.edu/kurose_ross/) Ch. 2 (DNS, HTTP) and Ch. 3 (TCP/UDP), plus their free **Wireshark labs** on the same site | The theory behind every lab here; the Wireshark labs are perfect extra practice | 4 h |
+| Chris Greer (YouTube): "TCP handshake", "Wireshark filters", "TCP retransmissions" | Best practical packet-analysis teacher | 2 h |
+| [Stanford CS 155](https://cs155.stanford.edu/) network security lectures (slides) | Attacks on ARP, DNS, TCP, and how they're defended | 1.5 h |
+| [Practical Networking](https://www.practicalnetworking.net/series/packet-traveling/): ARP and encapsulation articles | Pairs with Lab 1 | 30 min |
+| Computerphile (YouTube): "TCP Meltdown", "How DNS works", "TLS handshake" | Quick intuition | 45 min |
+| [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/) chapters 1–5 | What sockets really are (for the C++ exercise) | 2 h |
+| [Suricata docs: Rules intro](https://docs.suricata.io/en/latest/rules/intro.html) | Read a signature like an analyst | 30 min |
+
 ## 3. Estimated time
 
 **8 hours** (5 h labs, 1 h PCAP challenge, 2 h report + runbook).
@@ -205,7 +217,21 @@ Do each lab, save the PCAP, and take a screenshot of the key packets for your re
    `curl`. Write the steps down. That's your **firewall troubleshooting runbook**.
 4. Subnetting: run `automation/python/subnet_quiz.py` until you get 10/10 twice in a row.
 
-## 10. Python exercise
+## 10. Coding exercises
+
+**Before you start:** [Python primer](../../docs/python-primer.md) sections 1, 4, 6, 10 and 11.
+
+**Other languages: C++ with libpcap.** Rewrite the core of `pcap_summary.py` in C++ using
+libpcap: open a PCAP, cast the raw bytes to Ethernet/IP/TCP header structs, count protocols and
+flag SYN scans. You'll learn **network byte order** (`ntohs`), why header lengths are stored in
+32-bit words, and why Wireshark is written in C. Compare its speed to the Python version on a
+large PCAP (`time ./sniffer -r big.pcap`).
+- Learn first: [CS50x weeks 1–4](https://cs50.harvard.edu/x/) (C, memory, pointers) and
+  [Beej's Guide](https://beej.us/guide/bgnet/) ch. 1–5;
+  [libpcap tutorial (tcpdump.org)](https://www.tcpdump.org/pcap.html).
+- Solution: `automation/cpp/sniffer.cpp` (`make`, then `./sniffer -r file.pcap`).
+
+**Python:**
 
 Write `pcap_summary.py` using [scapy](https://scapy.readthedocs.io/) that takes a PCAP and prints:
 - the top 5 talkers (source IP → packet count)

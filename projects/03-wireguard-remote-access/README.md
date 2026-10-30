@@ -23,6 +23,18 @@ and port forwarding, least-privilege firewall design, access policy writing, cha
 - Key lifecycle: generation, distribution (public keys only!), rotation, revocation
 - Change management: replacing the P01 admin WAN rule safely
 
+### Learn alongside (read / watch)
+
+| Resource | Why | Time |
+|---|---|---|
+| Computerphile (YouTube): "Public Key Cryptography", "Diffie-Hellman Key Exchange", "Elliptic Curves" | Intuition for what your key pairs are doing | 45 min |
+| [Christof Paar: Introduction to Cryptography](https://www.crypto-textbook.com/) lectures on Diffie–Hellman and elliptic curves | University-level, still very clear | 3 h |
+| [Dan Boneh: Cryptography I](https://www.coursera.org/learn/crypto) (audit free), weeks 5–6 (key exchange, public-key encryption) | The rigorous version | optional |
+| [WireGuard whitepaper](https://www.wireguard.com/papers/wireguard.pdf) sections 1–2 and 5 | Cryptokey routing and the handshake, from the author | 1 h |
+| [CS50 Cybersecurity](https://cs50.harvard.edu/cybersecurity/) lecture "Securing Data" | Encryption and keys in plain language | 1.5 h |
+| [Tailscale blog: How NAT traversal works](https://tailscale.com/blog/how-nat-traversal-works) | The best explanation of NAT traversal on the internet | 1 h |
+| [NIST SP 800-77r1: Guide to IPsec VPNs](https://csrc.nist.gov/pubs/sp/800/77/r1/final) sections 1–3 | How organizations plan VPNs (good for your policy doc) | optional |
+
 ## 3. Estimated time
 
 **6 hours** (3 h build + friend onboarding, 1 h troubleshooting, 2 h policy/runbook/CR).
@@ -230,7 +242,17 @@ decision.)
 4. Capture on OPNsense's WAN during a handshake. What can an observer on the internet learn?
    (Your IP, their IP, packet sizes and timing. No contents and no identities.)
 
-## 10. Python exercise
+## 10. Coding exercises
+
+**Before you start:** [Python primer](../../docs/python-primer.md) sections 1, 3 and 8.
+
+**Other languages: Bash + reading Go.** Extend `automation/peer-config.sh` so it also prints a
+QR code for phone peers (`qrencode`). Optional: do the [Tour of Go](https://go.dev/tour/), then
+skim [wireguard-go](https://git.zx2c4.com/wireguard-go/)'s `device/noise-protocol.go` and find
+where the handshake messages from the whitepaper are built. Reading real security code is a
+skill in itself.
+
+**Python:**
 
 On OPNsense's shell, `wg show all dump` prints tab-separated peer stats. Write
 `wg_status.py` that parses that output (piped in or from a file) and prints, per peer: name

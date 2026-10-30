@@ -17,6 +17,16 @@ step "python compile"
 mapfile -t py_files < <(git ls-files -co --exclude-standard '*.py')
 python3 -m py_compile "${py_files[@]}" && echo "ok (${#py_files[@]} files)" || rc=1
 
+step "C/C++ syntax"
+mapfile -t c_files < <(git ls-files -co --exclude-standard '*.c' '*.cpp')
+if command -v g++ >/dev/null; then
+  for f in "${c_files[@]}"; do
+    if [[ "$f" == *.cpp ]]; then g++ -std=c++17 -Wall -Wextra -fsyntax-only "$f" || rc=1
+    else gcc -Wall -Wextra -fsyntax-only "$f" || rc=1; fi
+  done
+  echo "checked ${#c_files[@]} files"
+else echo "g++ not installed (skipped)"; fi
+
 step "yamllint"
 mapfile -t yml_files < <(git ls-files -co --exclude-standard '*.yml' '*.yaml')
 if command -v yamllint >/dev/null; then

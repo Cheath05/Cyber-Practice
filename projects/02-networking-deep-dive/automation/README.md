@@ -7,4 +7,5 @@
 | `remote-capture.sh` | Run on your laptop: streams tcpdump from a lab host into Wireshark |
 | `answer-key.md` | Answers to the lab questions and exercises |
 | `python/pcap_summary.py` | Python exercise solution (scapy): top talkers, protocols, DNS, scan detection |
+| `cpp/sniffer.cpp` + `Makefile` | C++ exercise solution: libpcap packet summarizer with scan detection (`make && ./sniffer -r file.pcap`) |
 | `python/subnet_quiz.py` | Subnetting practice quiz (standard library only) |

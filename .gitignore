@@ -36,3 +36,13 @@ __pycache__/
 *.pyc
 .venv/
 .vscode/
+
+# --- Compiled exercise binaries ---
+*.o
+*.out
+projects/**/cpp/*
+!projects/**/cpp/*.cpp
+!projects/**/cpp/*.c
+!projects/**/cpp/*.h
+!projects/**/cpp/Makefile
+!projects/**/cpp/*.md

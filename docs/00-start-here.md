@@ -84,9 +84,15 @@ projects/NN-name/
   automation/      ← SOLUTION: scripts/configs/answer keys. Use only if stuck.
 ```
 
-Every guide uses the same sections: Goal → Concepts → Hours → Resources → Prereqs → Diagram →
-Build steps → Checkpoints → Exercises → Python exercise → Snapshot/teardown → Stretch goals →
+Every guide uses the same sections: Goal → Concepts → **Learn alongside** (readings and
+videos) → Hours → Resources → Prereqs → Diagram → Build steps → Checkpoints → Exercises →
+**Coding exercises** (Python + another language) → Snapshot/teardown → Stretch goals →
 Deliverables → Definition of done → Resume bullets → References.
+
+**Study rhythm that works:** watch/read the *Learn alongside* items for a project the week
+*before* you build it (commute, phone, between classes), then do the hands-on part in your
+lab blocks. Course and language guides: [learning-path](learning-path.md) and
+[python-primer](python-primer.md).
 
 **When to open `automation/`:** try the guide first. If you've been stuck on one step for more
 than about 45 minutes and searching hasn't helped, read the matching solution script. *Read*

@@ -54,6 +54,8 @@ managers ask about most, so your resume improves during this application cycle.
 | [00-start-here](docs/00-start-here.md) | Resource budget, lab profiles, how to work through a project |
 | [network-reference](docs/network-reference.md) | **Single source of truth**: VLANs, IPs, VMIDs, RAM, firewall matrix |
 | [schedule](docs/schedule.md) | Week-by-week plan from Nov 2026 to Summer 2027, plus internship application timing |
+| [learning-path](docs/learning-path.md) | MIT/Harvard/Stanford courses, video series, and the Python → C/C++ → Bash/PowerShell programming track |
+| [python-primer](docs/python-primer.md) | Every Python technique the project solutions use, with small examples |
 | [what-employers-want](docs/what-employers-want.md) | Hiring research, skill → project → proof map, resume and interview tips |
 | [documentation-guide](docs/documentation-guide.md) | How industry documents work, writing style, sanitizing before publishing |
 | [career-paths](docs/career-paths.md) | SOC, pentest, DFIR, security engineering, GRC, cloud: what each does, which projects and certs fit |
