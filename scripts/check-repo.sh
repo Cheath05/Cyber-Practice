@@ -47,7 +47,7 @@ done
 echo "checked ${#xml_files[@]} files"
 
 step "docker compose config"
-mapfile -t compose_files < <(git ls-files -co --exclude-standard '*docker-compose.yml' '*compose.yaml')
+mapfile -t compose_files < <(git ls-files -co --exclude-standard '*compose*.yml' '*compose*.yaml' '*/compose/*.yml')
 if docker compose version >/dev/null 2>&1; then
   for f in "${compose_files[@]}"; do docker compose -f "$f" config -q || { echo "invalid: $f"; rc=1; }; done
   echo "checked ${#compose_files[@]} files"

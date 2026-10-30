@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars (git-ignored) and fill in. Values mirror docs/network-reference.md.
+pm_endpoint    = "https://192.168.1.10:8006/"
+pm_api_token   = "terraform@pve!tf=REPLACE-WITH-TOKEN-SECRET"
+node_name      = "pve"
+ssh_public_key = "ssh-ed25519 AAAA... you@laptop"
+
+vms = {
+  "lab-docker" = { vmid = 301, vlan = 30, ip_cidr = "10.10.30.10/24", gateway = "10.10.30.1", memory = 3072, balloon = 1024, cores = 2, disk_gb = 40 }
+  "rvb-blue-1" = { vmid = 321, vlan = 30, ip_cidr = "10.10.30.51/24", gateway = "10.10.30.1", memory = 1536, balloon = 768, cores = 1, disk_gb = 20 }
+  # Coding exercise solution: the Wazuh VM (no ballooning)
+  # "wazuh"    = { vmid = 401, vlan = 40, ip_cidr = "10.10.40.10/24", gateway = "10.10.40.1", memory = 5120, balloon = 0, cores = 4, disk_gb = 50 }
+}

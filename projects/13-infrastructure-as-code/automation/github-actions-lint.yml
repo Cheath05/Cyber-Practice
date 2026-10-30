@@ -1,0 +1,45 @@
+# Copy to .github/workflows/lint.yml in your repo.
+name: lint
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install linters
+        run: |
+          pip install shellcheck-py yamllint ansible-core
+          sudo apt-get update && sudo apt-get install -y libpcap-dev
+
+      - name: Repo checks (shell, python, C/C++, YAML, XML, compose, links, secrets)
+        run: scripts/check-repo.sh
+
+      - name: Ansible syntax check
+        working-directory: projects/13-infrastructure-as-code/automation/ansible
+        run: |
+          ansible-galaxy collection install community.general
+          ansible-playbook site.yml --syntax-check
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform fmt + validate
+        working-directory: projects/13-infrastructure-as-code/automation/terraform
+        run: |
+          terraform fmt -check -recursive
+          terraform init -backend=false
+          terraform validate
+
+      - name: Trivy IaC misconfiguration scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: config
+          scan-ref: projects/13-infrastructure-as-code/automation
+          exit-code: "0"   # report only; raise to 1 once you've triaged the findings
